@@ -1,6 +1,5 @@
 name: Build and Deploy Angular Project
 
-# تشغيل عند push على main أو يدويًا
 on:
   push:
     branches: ["main"]
@@ -11,32 +10,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. سحب الكود من GitHub
+      # 1. Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. إعداد Node.js
+      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      # 3. تثبيت الحزم
+      # 3. Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # 4. بناء Angular للإنتاج
+      # 4. Build Angular production
       - name: Build Angular production
-        run: |
-          npm run build -- --configuration production --base-href "/AngularTest/"
+        run: npm run build -- --configuration production --base-href "/my-app/"
 
-      # 5. التحقق من مجلد البناء
+      # 5. Check dist folder
       - name: Check dist folder
         run: ls -l dist/
 
-      # 6. نشر على GitHub Pages
+      # 6. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: dist/my-app  # غيّر هذا الاسم حسب ما يظهر في الخطوة السابقة
+          folder: dist/my-app
+          token: ${{ secrets.GITHUB_TOKEN }}
