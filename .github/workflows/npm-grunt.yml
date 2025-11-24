@@ -1,5 +1,6 @@
 name: Build and Deploy Angular Project
 
+# تشغيل Workflow عند كل push على main أو يدويًا من واجهة GitHub
 on:
   push:
     branches: ["main"]
@@ -24,17 +25,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # 4. تشغيل Grunt إذا كنت تستخدمه
-      - name: Build with Grunt
-        run: grunt
-
-      # 5. بناء Angular للإنتاج
+      # 4. بناء Angular للإنتاج
       - name: Build Angular production
         run: npm run build -- --configuration production --base-href "/AngularTest/"
 
-      # 6. نشر على GitHub Pages
+      # 5. نشر على GitHub Pages
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages
-          folder: dist/angular-test   # غيّر الاسم حسب مجلد Angular داخل dist
+          branch: gh-pages                # الفرع الذي سيحتوي على ملفات النشر
+          folder: dist/angular-test       # غيّر الاسم حسب مجلد Angular داخل dist
