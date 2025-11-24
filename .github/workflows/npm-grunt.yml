@@ -1,0 +1,40 @@
+name: Build and Deploy Angular Project
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. سحب الكود من GitHub
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. إعداد Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # 3. تثبيت الحزم
+      - name: Install dependencies
+        run: npm install
+
+      # 4. تشغيل Grunt إذا كنت تستخدمه
+      - name: Build with Grunt
+        run: grunt
+
+      # 5. بناء Angular للإنتاج
+      - name: Build Angular production
+        run: npm run build -- --configuration production --base-href "/AngularTest/"
+
+      # 6. نشر على GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist/angular-test   # غيّر الاسم حسب مجلد Angular داخل dist
